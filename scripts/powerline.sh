@@ -12,10 +12,11 @@ main()
   show_left_icon=$(get_tmux_option "@show-left-icon" smiley)
   show_left_icon_padding=$(get_tmux_option "@left-icon-padding" 1)
   show_military=$(get_tmux_option "@military-time" false)
-  #show_left_sep=$(get_tmux_option "@show-left-sep" )
+  
   show_left_sep=$(get_tmux_option "@show-left-sep" )
-  #show_right_sep=$(get_tmux_option "@show-right-sep" )
-  show_right_sep=$(get_tmux_option "@show-right-sep" )
+  show_left_head=$(get_tmux_option "@show-left-head" )
+  show_left_tail=$(get_tmux_option "@show-left-tail" )
+  
   show_border_contrast=$(get_tmux_option "@border-contrast" false)
   show_refresh=$(get_tmux_option "@refresh-rate" 5)
   IFS=' ' read -r -a plugins <<< $(get_tmux_option "")
@@ -81,12 +82,9 @@ main()
   left_icon="$left_icon$padding"
 
   # Handle powerline option
-  right_sep="$show_right_sep"
-  right_head=
-  right_tail=
   left_sep="$show_left_sep"
-  left_head=
-  left_tail=
+  left_head="$show_left_head"
+  left_tail="$show_left_tail"
 
   case $show_flags in
     false)
@@ -109,7 +107,6 @@ main()
 
   # set length
   tmux set-option -g status-left-length 100
-  tmux set-option -g status-right-length 100
 
   # pane border styling
   if $show_border_contrast; then
@@ -128,11 +125,15 @@ main()
   # Status left
   tmux set-option -g status-left "#[bg=${black},fg=${green}]#{?client_prefix,#[fg=${tan}],}${left_tail}#[bg=${green},fg=${black}]#{?client_prefix,#[bg=${tan}],} ${left_icon} #[fg=${green},bg=${black}]#{?client_prefix,#[fg=${tan}],}${left_sep}"
   powerbg=${black}
+  
+  # Remove right status info
+  tmux set-option -g status-right ""
 
   # Window option
   tmux set-window-option -g window-status-current-format "#[fg=${black},bg=${blue}]${left_sep}#[fg=${black},bg=${blue}] #I #[fg=${black},bg=${blue}] #[fg=${black},bg=${blue}]#W${current_flags} #[fg=${blue},bg=${black}]${left_sep}"
 
   tmux set-window-option -g window-status-format "#[fg=${black},bg=${grey_blue}]${left_sep}#[fg=${steel_blue},bg=${grey_blue}] #I #W${flags}#[fg=${grey_blue},bg=${black}]${left_sep}"
+
   tmux set-window-option -g window-status-separator "" 
   tmux set-window-option -g window-status-activity-style "bold"
   tmux set-window-option -g window-status-bell-style "bold"
