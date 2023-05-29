@@ -4,6 +4,7 @@ export LC_ALL=en_US.UTF-8
 
 current_dir="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
 source $current_dir/utils.sh
+source $current_dir/themes/nightfly.sh
 
 main()
 {
@@ -20,47 +21,6 @@ main()
   show_border_contrast=$(get_tmux_option "@border-contrast" false)
   show_refresh=$(get_tmux_option "@refresh-rate" 5)
   IFS=' ' read -r -a plugins <<< $(get_tmux_option "")
-  show_empty_plugins=$(get_tmux_option "@show-empty-plugins" true)
-
-  # Nightfly Color Pallette
-
-  # Background and foreground
-  black='#011627'
-  white='#c3ccdc'
-  
-  # Variations of blue-grey
-  black_blue='#081e2f'
-  dark_blue='#092236'
-  deep_blue='#0e293f'
-  slate_blue='#2c3043'
-  pickle_blue='#38507a'
-  regal_blue='#1d3b53'
-  steel_blue='#4b6479'
-  grey_blue='#1E303E'
-  cadet_blue='#a1aab8'
-  ash_blue='#acb4c2'
-  white_blue='#d6deeb'
-  
-  # Core theme colors
-  yellow='#e3d18a'
-  peach='#ffcb8b'
-  tan='#ecc48d'
-  orange='#f78c6c'
-  orchid='#e39aa6'
-  dark_red='#fc514e'
-  bright_red='#ff5874'
-  violet='#c792ea'
-  purple='#ae81ff'
-  indigo='#5e97ec'
-  blue='#82aaff'
-  cyan='#7fdbca'
-  emerald='#21c7a8'
-  green='#a1cd5e'
-  pink='#ff79c6'
-  # Extra colors
-  cyan_blue='#296596'
-  bay_blue='#24567F'
-
 
   # Handle left icon configuration
   case $show_left_icon in
@@ -91,8 +51,8 @@ main()
       flags=""
       current_flags="";;
     true)
-      flags="#{?window_flags,#[fg=${steel_blue}]#{window_flags}, }"
-      current_flags="#{?window_flags,#[fg=${black}]#{window_flags},}"
+      flags="#{?window_flags,#[fg=${window_font}]#{window_flags}, }"
+      current_flags="#{?window_flags,#[fg=${active_window_font}]#{window_flags},}"
   esac
 
   # sets refresh interval to every 5 seconds
@@ -110,29 +70,28 @@ main()
 
   # pane border styling
   if $show_border_contrast; then
-    tmux set-option -g pane-active-border-style "fg=${dark_red}"
+    tmux set-option -g pane-active-border-style "fg=${dark_active_border}"
   else
-    tmux set-option -g pane-active-border-style "fg=${bright_red}"
+    tmux set-option -g pane-active-border-style "fg=${bright_active_border}"
   fi
-  tmux set-option -g pane-border-style "fg=${steel_blue}"
+  tmux set-option -g pane-border-style "fg=${border}"
 
   # message styling
-  tmux set-option -g message-style "bg=${grey_blue},fg=${white}"
+  tmux set-option -g message-style "bg=${background},fg=${foreground}"
 
   # status bar
-  tmux set-option -g status-style "bg=${black},fg=${white}"
+  tmux set-option -g status-style "bg=${background},fg=${foreground}"
 
   # Status left
-  tmux set-option -g status-left "#[bg=${black},fg=${green}]#{?client_prefix,#[fg=${tan}],}${left_tail}#[bg=${green},fg=${black}]#{?client_prefix,#[bg=${tan}],} ${left_icon} #[fg=${green},bg=${black}]#{?client_prefix,#[fg=${tan}],}${left_sep}"
-  powerbg=${black}
+  tmux set-option -g status-left "#[bg=${session_font},fg=${session_tag}]#{?client_prefix,#[fg=${session_prefix_tag}],}${left_tail}#[bg=${session_tag},fg=${session_font}]#{?client_prefix,#[bg=${session_prefix_tag}],} ${left_icon} #[fg=${session_tag},bg=${session_font}]#{?client_prefix,#[fg=${session_prefix_tag}],}${left_sep}"
   
   # Remove right status info
   tmux set-option -g status-right ""
 
   # Window option
-  tmux set-window-option -g window-status-current-format "#[fg=${black},bg=${blue}]${left_sep}#[fg=${black},bg=${blue}] #I #[fg=${black},bg=${blue}] #[fg=${black},bg=${blue}]#W${current_flags} #[fg=${blue},bg=${black}]${left_sep}"
+  tmux set-window-option -g window-status-current-format "#[fg=${active_window_font},bg=${active_window_tag}]${left_sep}#[fg=${active_window_font},bg=${active_window_tag}] #I #[fg=${active_window_font},bg=${active_window_tag}] #[fg=${active_window_font},bg=${active_window_tag}]#W${current_flags} #[fg=${active_window_tag},bg=${active_window_font}]${left_sep}"
 
-  tmux set-window-option -g window-status-format "#[fg=${black},bg=${grey_blue}]${left_sep}#[fg=${steel_blue},bg=${grey_blue}] #I #W${flags}#[fg=${grey_blue},bg=${black}]${left_sep}"
+  tmux set-window-option -g window-status-format "#[fg=${background},bg=${window_tag}]${left_sep}#[fg=${window_font},bg=${window_tag}] #I #W${flags}#[fg=${window_tag},bg=${background}]${left_sep}"
 
   tmux set-window-option -g window-status-separator "" 
   tmux set-window-option -g window-status-activity-style "bold"
