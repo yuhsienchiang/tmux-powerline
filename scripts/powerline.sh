@@ -9,17 +9,17 @@ source $current_dir/themes/nightfly.sh
 main()
 {
   # set configuration option variables
-  show_flags=$(get_tmux_option "@show-flags" false)
-  show_left_icon=$(get_tmux_option "@show-left-icon" smiley)
-  show_left_icon_padding=$(get_tmux_option "@left-icon-padding" 1)
-  show_military=$(get_tmux_option "@military-time" false)
+  show_flags=$(get_tmux_option "@powerline-show-flags" false)
+  show_left_icon=$(get_tmux_option "@powerline-show-left-icon" smiley)
+  show_left_icon_padding=$(get_tmux_option "@powerline-left-icon-padding" 1)
+  show_military=$(get_tmux_option "@powerline-military-time" false)
   
-  show_left_sep=$(get_tmux_option "@show-left-sep" )
-  show_left_head=$(get_tmux_option "@show-left-head" )
-  show_left_tail=$(get_tmux_option "@show-left-tail" )
+  show_left_sep=$(get_tmux_option "@powerline-show-left-sep" )
+  show_left_head=$(get_tmux_option "@powerline-show-left-head" )
+  show_left_tail=$(get_tmux_option "@powerline-show-left-tail" )
   
-  show_border_contrast=$(get_tmux_option "@border-contrast" false)
-  show_refresh=$(get_tmux_option "@refresh-rate" 5)
+  show_border_contrast=$(get_tmux_option "@powerline-border-contrast" false)
+  show_refresh=$(get_tmux_option "@powerline-refresh-rate" 5)
   IFS=' ' read -r -a plugins <<< $(get_tmux_option "")
 
   # Handle left icon configuration
